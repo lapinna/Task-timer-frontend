@@ -1,16 +1,19 @@
-import styles from "./registerForm.module.scss";
 import { z, ZodType } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery } from "@apollo/client";
+import styles from "../Form.module.scss";
+import { FormData } from "../../../util/types.js";
+import UserOperations from "../../../graphql/operations/user";
 
-type FormData = {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
+interface BtnProps {
+  btnHaveAccount: (event: React.MouseEvent<HTMLButtonElement>) => void;
+}
 
-const RegisterForm = () => {
+const RegisterForm: React.FC<BtnProps> = ({btnHaveAccount}) => {
+  const getAllUsers = useQuery(UserOperations.Queries.ALL_USERS).data;
+  console.log("getAllUsers", getAllUsers);
+
   const schema: ZodType<FormData> = z
     .object({
       username: z.string().min(2).max(50),
@@ -25,8 +28,14 @@ const RegisterForm = () => {
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const submitData = (data: FormData) => {
-    console.log("Submit", data)
+  const [ registerUser ] = useMutation(UserOperations.Mutations.REGISTER_USER);
+
+  const submitData = async (data: FormData) => {
+    try {
+      await registerUser({variables: data})
+    } catch (error) {
+      console.log("onSubmit error", error);
+    }
   };
 
   return (
@@ -53,11 +62,11 @@ const RegisterForm = () => {
           <div>
             <label htmlFor="confirmPassword">Confirm password:</label>
             <input type="password" id="confirmPassword" {...register("confirmPassword")} />
-            {errors.password && <span>{errors.password.message}</span>}
+            {errors.confirmPassword && <span>{errors.confirmPassword.message}</span>}
           </div>
         </fieldset>
         <button type="submit">Create</button>
-        <button>Have an Account?</button>
+        <button onClick={btnHaveAccount}>Have an Account?</button>
       </form>
     </div>
   )
