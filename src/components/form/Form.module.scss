@@ -1,13 +1,13 @@
 .formWrapper {
   width: 100%;
   height: 100vh;
-  display: grid;
-  grid-template-columns: 1fr minmax(auto, 1fr) 1fr;
-  grid-template-rows: 1fr minmax(auto, 1fr) 1fr;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: #00B7A8;
 
   form {
-    width: 100%;
+    width: 30%;
     display: grid;
     grid-column: 2;
     grid-row: 2;

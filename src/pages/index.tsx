@@ -1,9 +1,18 @@
-import RegisterForm from "@/components/form/register/RegisterForm";
+import { useState } from "react";
+import LoginForm from "@/components/form/login/LoginForm";
 
-export default function Home() {
+const Home = () => {
+  const [isLogin, setIsLogin] = useState(true);
+
+  const toogleAuth = () => {
+    setIsLogin(!isLogin);
+  };
+
   return (
     <div>
-      <RegisterForm />
+        <LoginForm isLogin={isLogin} toogle={toogleAuth} />
     </div>
   )
 }
+
+export default Home;
