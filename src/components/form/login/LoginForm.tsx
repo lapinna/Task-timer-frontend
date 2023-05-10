@@ -3,7 +3,7 @@ import { useMutation } from "@apollo/client";
 import { useRouter } from 'next/router';
 import styles from "../Form.module.scss";
 import RegisterForm from "../register/RegisterForm";
-import UserOperations from "../../../graphql/operations/user"
+import UserOperations from "../../../graphql/operations/user";
 
 interface AuthProps {
   isLogin: boolean;
@@ -24,7 +24,9 @@ const LoginForm: React.FC<AuthProps> = ({ isLogin, toogle }) => {
 
   const submitData = async ({ email, password }: LoginFormValues) => {
     try {
-      await loginUser({ variables: { email, password } });
+      const user = await loginUser({ variables: { email, password } });
+      const userToken = user.data.loginUser.token;
+      localStorage.setItem("token", userToken)
       router.push("/profile");
     } catch (error) {
       console.error(error)
