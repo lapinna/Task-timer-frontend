@@ -1,7 +1,7 @@
 import { z, ZodType } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import styles from "../Form.module.scss";
 import { FormData } from "../../../util/types.js";
 import UserOperations from "../../../graphql/operations/user";
@@ -10,10 +10,7 @@ interface BtnProps {
   btnHaveAccount: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const RegisterForm: React.FC<BtnProps> = ({btnHaveAccount}) => {
-  const getAllUsers = useQuery(UserOperations.Queries.ALL_USERS).data;
-  console.log("getAllUsers", getAllUsers);
-
+const RegisterForm: React.FC<BtnProps> = ({ btnHaveAccount }) => {
   const schema: ZodType<FormData> = z
     .object({
       username: z.string().min(2).max(50),
@@ -26,13 +23,15 @@ const RegisterForm: React.FC<BtnProps> = ({btnHaveAccount}) => {
       path: ["confirmPassword"],
     });
 
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({ resolver: zodResolver(schema) });
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const [ registerUser ] = useMutation(UserOperations.Mutations.REGISTER_USER);
+  const [registerUser] = useMutation(UserOperations.Mutations.REGISTER_USER);
 
-  const submitData = async (data: FormData) => {
+  const submitData = async ({ username, email, password }: FormData) => {
     try {
-      await registerUser({variables: data})
+      const user = await registerUser({ variables: { username, email, password } });
+      alert(`User ${user.data.registerUser.username} is created. Please login!`);
+      reset()
     } catch (error) {
       console.log("onSubmit error", error);
     }
@@ -66,7 +65,7 @@ const RegisterForm: React.FC<BtnProps> = ({btnHaveAccount}) => {
           </div>
         </fieldset>
         <button type="submit">Create</button>
-        <button onClick={btnHaveAccount}>Have an Account?</button>
+        <button type="button" onClick={btnHaveAccount}>Have an Account?</button>
       </form>
     </div>
   )
