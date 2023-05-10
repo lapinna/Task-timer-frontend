@@ -9,7 +9,7 @@ const authLink = setContext((_, { header }) => {
   return {
     headers: {
       ...header,
-      authorization: localStorage.getItem("token") || ""
+      "Access-Control-Allow-Origin": "*"
     }
   }
 })

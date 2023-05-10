@@ -15,8 +15,8 @@ export default {
 
   Mutations: {
     REGISTER_USER: gql`
-    mutation RegisterUser($input: RegisterInput!) {
-      registerUser(input: $input) {
+    mutation RegisterUser($username: String!, $email: String!, $password: String!) {
+      registerUser(username: $username, email: $email, password: $password) {
         username
         email
         password
@@ -26,10 +26,11 @@ export default {
     `,
 
     LOGIN_USER: gql`
-    mutation LoginUser($input: LoginInput!) {
-      loginUser(input: $input) {
-        userId
-        username
+    mutation LoginUser($email: String!, $password: String!) {
+      loginUser(email: $email, password: $password) {
+        user{
+          username
+        }
         token
         tokenExpire
         }
