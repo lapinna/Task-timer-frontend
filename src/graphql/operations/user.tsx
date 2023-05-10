@@ -2,9 +2,9 @@ import { gql } from "@apollo/client";
 
 export default {
   Queries: {
-    ALL_USERS: gql`
-    query Users {
-      users {
+    CURRENT_USER: gql`
+    query CurrentUser {
+      currentUser {
         _id
         username
         email
@@ -32,7 +32,6 @@ export default {
           username
         }
         token
-        tokenExpire
         }
       }
     `
