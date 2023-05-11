@@ -1,21 +1,16 @@
 import { useForm } from "react-hook-form";
 import { useMutation } from "@apollo/client";
 import { useRouter } from 'next/router';
+import Link from "next/link";
 import styles from "../Form.module.scss";
-import RegisterForm from "../register/RegisterForm";
 import UserOperations from "../../../graphql/operations/user";
-
-interface AuthProps {
-  isLogin: boolean;
-  toogle: () => void;
-}
 
 type LoginFormValues = {
   email: string;
   password: string;
 }
 
-const LoginForm: React.FC<AuthProps> = ({ isLogin, toogle }) => {
+const LoginForm = () => {
   const router = useRouter();
 
   const { register, handleSubmit } = useForm<LoginFormValues>();
@@ -35,7 +30,6 @@ const LoginForm: React.FC<AuthProps> = ({ isLogin, toogle }) => {
 
   return (
     <div className={styles.formWrapper}>
-      {isLogin ? (
         <form onSubmit={handleSubmit(submitData)}>
           <h2>Welcome Back!</h2>
           <fieldset>
@@ -52,11 +46,8 @@ const LoginForm: React.FC<AuthProps> = ({ isLogin, toogle }) => {
             </div>
           </fieldset>
           <button type="submit">Login</button>
-          <button type="button" onClick={() => toogle()}>Create an Account</button>
+          <Link href={"/register"}><button type="button">Create an Account</button></Link>
         </form>
-      ) : (
-        <RegisterForm btnHaveAccount={() => toogle()} />
-      )}
     </div>
   )
 };

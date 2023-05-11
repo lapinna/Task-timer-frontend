@@ -2,15 +2,15 @@ import { z, ZodType } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@apollo/client";
+import Link from "next/link";
 import styles from "../Form.module.scss";
 import { FormData } from "../../../util/types.js";
 import UserOperations from "../../../graphql/operations/user";
+import { useRouter } from "next/router";
 
-interface BtnProps {
-  btnHaveAccount: (event: React.MouseEvent<HTMLButtonElement>) => void;
-}
+const RegisterForm = () => {
+  const router = useRouter();
 
-const RegisterForm: React.FC<BtnProps> = ({ btnHaveAccount }) => {
   const schema: ZodType<FormData> = z
     .object({
       username: z.string().min(2).max(50),
@@ -30,8 +30,9 @@ const RegisterForm: React.FC<BtnProps> = ({ btnHaveAccount }) => {
   const submitData = async ({ username, email, password }: FormData) => {
     try {
       const user = await registerUser({ variables: { username, email, password } });
-      alert(`User ${user.data.registerUser.username} is created. Please login!`);
-      reset()
+      if(user) {
+        router.push("/profile");
+      }
     } catch (error) {
       console.log("onSubmit error", error);
     }
@@ -65,7 +66,7 @@ const RegisterForm: React.FC<BtnProps> = ({ btnHaveAccount }) => {
           </div>
         </fieldset>
         <button type="submit">Create</button>
-        <button type="button" onClick={btnHaveAccount}>Have an Account?</button>
+        <Link href={"/"}><button type="button">Have an Account?</button></Link>
       </form>
     </div>
   )
