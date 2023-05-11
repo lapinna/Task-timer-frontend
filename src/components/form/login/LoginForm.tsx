@@ -45,7 +45,7 @@ const LoginForm = () => {
               </div>
             </div>
           </fieldset>
-          <button type="submit">Login</button>
+          <button type="submit" data-testid="loginBtn">Login</button>
           <Link href={"/register"}><button type="button">Create an Account</button></Link>
         </form>
     </div>
