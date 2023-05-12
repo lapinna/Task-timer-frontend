@@ -30,23 +30,23 @@ const LoginForm = () => {
 
   return (
     <div className={styles.formWrapper}>
-        <form onSubmit={handleSubmit(submitData)}>
+        <form onSubmit={handleSubmit(submitData)} data-testid="loginForm">
           <h2>Welcome Back!</h2>
           <fieldset>
             <legend>Log In</legend>
             <div>
               <div>
                 <label htmlFor="email">Email:</label>
-                <input type="email" {...register("email")} required />
+                <input type="email" {...register("email")} required data-testid="emailInput"/>
               </div>
               <div>
                 <label htmlFor="password">Password:</label>
-                <input type="password" {...register("password")} required />
+                <input type="password" {...register("password")} required data-testid="passwordInput"/>
               </div>
             </div>
           </fieldset>
           <button type="submit" data-testid="loginBtn">Login</button>
-          <Link href={"/register"}><button type="button">Create an Account</button></Link>
+          <Link href={"/register"}><button type="button" data-testid="registerBtn">Create an Account</button></Link>
         </form>
     </div>
   )
