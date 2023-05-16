@@ -20,8 +20,7 @@ const LoginForm = () => {
   const submitData = async ({ email, password }: LoginFormValues) => {
     try {
       const user = await loginUser({ variables: { email, password } });
-      const userToken = user.data.loginUser.token;
-      localStorage.setItem("token", userToken)
+      localStorage.setItem("loggedInUser", JSON.stringify(user));
       router.push("/profile");
     } catch (error) {
       console.error(error)
