@@ -3,12 +3,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@apollo/client";
 import Link from "next/link";
-import styles from "../Form.module.scss";
-import { FormData } from "../../../util/types.js";
-import UserOperations from "../../../graphql/operations/user";
 import { useRouter } from "next/router";
+import { useContext } from "react";
+import styles from "../Form.module.scss";
+import { FormData } from "@/util/types.js";
+import UserOperations from "@/graphql/operations/user";
+import { AuthContext } from "@/context/AuthContext";
 
 const RegisterForm = () => {
+  const context = useContext(AuthContext);
   const router = useRouter();
 
   const schema: ZodType<FormData> = z
@@ -23,16 +26,15 @@ const RegisterForm = () => {
       path: ["confirmPassword"],
     });
 
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>({ resolver: zodResolver(schema) });
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const [registerUser] = useMutation(UserOperations.Mutations.REGISTER_USER);
 
   const submitData = async ({ username, email, password }: FormData) => {
     try {
       const user = await registerUser({ variables: { username, email, password } });
-      if(user) {
-        router.push("/profile");
-      }
+      context.login(user)
+      router.push("/profile");
     } catch (error) {
       console.log("onSubmit error", error);
     }
