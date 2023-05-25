@@ -1,11 +1,6 @@
 import { createContext, useReducer } from "react";
 
-const AuthContext = createContext({
-  user: null,
-  authenticated: false,
-  login: (userData) => {},
-  logout: () => {},
-});
+const AuthContext = createContext();
 
 function authReducer(state, action) {
   switch (action.type) {
@@ -26,18 +21,26 @@ function authReducer(state, action) {
   }
 }
 
-const AuthProvider = (props) => {
+const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, { user: null });
 
   function login(userData) {
-    localStorage.setItem("token", userData.data.loginUser.token);
-    dispatch({
-      type: "LOGIN",
-      payload: userData,
-    });
+    if (userData.data.loginUser) {
+      localStorage.setItem("token", userData.data.loginUser.token);
+      dispatch({
+        type: "LOGIN",
+        payload: userData.data.loginUser,
+      });
+    } else {
+      localStorage.setItem("token", userData.data.registerUser.token);
+      dispatch({
+        type: "LOGIN",
+        payload: userData.data.registerUser,
+      });
+    }
   }
 
-  function logout() {s
+  function logout() {
     localStorage.removeItem("token");
     dispatch({
       type: "LOGOUT",
@@ -45,10 +48,9 @@ const AuthProvider = (props) => {
   }
 
   return (
-    <AuthContext.Provider
-      value={{ user: state.user, login, logout }}
-      {...props}
-    />
+    <AuthContext.Provider value={{ user: state.user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 

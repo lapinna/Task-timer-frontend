@@ -1,20 +1,19 @@
 import { useRouter } from "next/router";
 import styles from "./NavBar.module.scss";
 import SearchBar from "../searchBar/SearchBar";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Searchresult from "../SearchResult/Searchresult";
+import { AuthContext } from "@/context/AuthContext";
 
 const NavBar = () => {
+  const { user, logout } = useContext(AuthContext);
   const router = useRouter();
-
-  const currentUser = JSON.parse(localStorage.getItem("loggedInUser")!);
-  const currentUserUsername = currentUser.data.loginUser.user.username;
 
   const [results, setResults] = useState<string[]>([]);
 
   const handleLogout = () => {
     try {
-      localStorage.removeItem("loggedInUser");
+      logout(user);
       router.push("/");
     } catch (error) {
       console.error(error)
@@ -24,7 +23,7 @@ const NavBar = () => {
   return (
     <div className={styles.navBarWrapper}>
       <div>
-        <h2>Hello, {currentUserUsername}</h2>
+        <h2>Hello, {user.username}</h2>
         <button>Update</button>
       </div>
       <SearchBar results={results} setResults={setResults} />

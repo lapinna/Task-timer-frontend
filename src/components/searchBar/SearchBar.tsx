@@ -1,52 +1,34 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import styles from "./SearchBar.module.scss";
+import { AuthContext } from "@/context/AuthContext";
 
 const SearchBar = ({ setResults }: any) => {
   const [searchInput, setSearchInput] = useState("");
-  const tasks = [
-    { title: "create searchbar" },
-    { title: "add button" },
-    { title: "filter tasks" },
-  ];
+    const { user } = useContext(AuthContext);
+    const tasks = user.tasks;
 
-  const fetchData = (value: any) => {
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then((response) => response.json())
-      .then((json) => {
-        const results = json.filter((user: any) => {
-          return (
-            value &&
-            user &&
-            user.name &&
-            user.name.toLowerCase().includes(value));
-        });
-        console.log(results)
-        setResults(results);
-      });
-  };
-
-  if (searchInput.length > 0) {
-    tasks.filter((task) => {
-      return task.title.includes(searchInput);
-    });
-  };
+  // if (searchInput.length > 0) {
+  //   tasks.filter((task: any) => {
+  //     return task.title.includes(searchInput);
+  //   });
+  // };
 
   const handleChange = (value: any) => {
     setSearchInput(value);
-    fetchData(value);
+    setResults(tasks);
   };
 
   return (
-      <div className={styles.searchBarWrapper}>
-        <BsSearch />
-        <input
-          onChange={(e) => handleChange(e.target.value)}
-          value={searchInput}
-          type="search"
-          placeholder="Type to search..."
-        />
-      </div>
+    <div className={styles.searchBarWrapper}>
+      <BsSearch />
+      <input
+        onChange={(e) => handleChange(e.target.value)}
+        value={searchInput}
+        type="search"
+        placeholder="Type to search..."
+      />
+    </div>
   );
 };
 
