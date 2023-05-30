@@ -1,0 +1,17 @@
+.timerContainer {
+  width: 30%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+
+  .timerTime {
+    margin-right: 0.7rem;
+  }
+
+  .timerButtons {
+    button {
+      margin-right: 0.7rem;
+    }
+  }
+}

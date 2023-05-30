@@ -2,6 +2,7 @@ import { useContext } from "react";
 import styles from "./UserProfileData.module.scss";
 import { AuthContext } from "@/context/AuthContext";
 import SearchBar from "../searchBar/SearchBar";
+import Timer from "../timer/Timer";
 
 const UserProfileData = () => {
   const { user } = useContext(AuthContext);
@@ -23,12 +24,7 @@ const UserProfileData = () => {
                   <div className={styles.taskTitleWrapper}>
                     <li>{task.title}</li>
                   </div>
-                  <div><span>spentTime</span></div>
-                  <div className={styles.taskButtonsWrapper}>
-                    <div><button>Start</button></div>
-                    <div><button>Pause</button></div>
-                    <div><button>Stop</button></div>
-                  </div>
+                  <Timer/>
                 </div>
               )
             })
