@@ -39,11 +39,11 @@ const LoginForm = () => {
           <div>
             <div>
               <label htmlFor="email">Email:</label>
-              <input type="email" {...register("email")} required data-testid="emailInput" />
+              <input id="email" type="email" {...register("email")} required data-testid="emailInput" />
             </div>
             <div>
               <label htmlFor="password">Password:</label>
-              <input type="password" {...register("password")} required data-testid="passwordInput" />
+              <input id="password" type="password" {...register("password")} required data-testid="passwordInput" />
             </div>
           </div>
         </fieldset>
