@@ -4,6 +4,7 @@ import styles from "./Timer.module.scss";
 const Timer = () => {
   const [time, setTime] = useState<number>(0);
   const [running, setRunning] = useState<boolean>(false);
+  const [submitTime, setSubmitTime] = useState<number>(0);
 
   useEffect(() => {
     let interval: any
@@ -24,22 +25,32 @@ const Timer = () => {
 
   const reset = () => {
     setTime(0);
+    setSubmitTime(time);
   };
 
   return (
     <div className={styles.timerContainer}>
-      <span className={styles.timerTime}>
-        {hours}:{minutes.toString().padStart(2, "0")}:
-        {seconds.toString().padStart(2, "0")}:
-        {milliseconds.toString().padStart(2, "0")}
-      </span>
+      {submitTime ? (<p>{submitTime}</p>) : (
+        <span className={styles.timerTime}>
+          {hours}:{minutes.toString().padStart(2, "0")}:
+          {seconds.toString().padStart(2, "0")}:
+          {milliseconds.toString().padStart(2, "0")}
+        </span>
+      )}
       <div className={styles.timerButtons}>
-        <button onClick={startAndStop}>
-          {running ? "Pause" : "Start"}
-        </button>
-        <button onClick={reset}>
-          Finish
-        </button>
+        {submitTime ? (
+          <div>
+            <button onClick={() => !submitTime}>Update</button>
+            <button>Delete</button>
+          </div>
+        ) : (
+          <div>
+            <button onClick={startAndStop}>
+              {running ? "Pause" : "Start"}
+            </button>
+            <button onClick={reset}>Finish</button>
+          </div>
+        )}
       </div>
     </div>
   )

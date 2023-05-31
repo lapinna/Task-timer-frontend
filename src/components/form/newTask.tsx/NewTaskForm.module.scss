@@ -1,0 +1,20 @@
+.newTaskContainer {
+
+  input {
+    width: 90%;
+    height: 25px;
+    margin-bottom: 1rem;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+
+    &:hover {
+      border: 1px solid #00B7A8;
+    }
+  }
+
+  input,
+  button {
+    cursor: pointer;
+  }
+}
