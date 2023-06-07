@@ -4,12 +4,28 @@ import { AuthContext } from "@/context/AuthContext";
 import SearchBar from "../searchBar/SearchBar";
 import Timer from "../timer/Timer";
 import Modal from "../modal/Modal";
+import { useDispatch, useSelector } from "react-redux";
+import { useQuery } from "@apollo/client";
+import TaskOperations from "../../graphql/operations/task";
+import { getTasks, getAllTasks } from "@/redux/features/taskSlice";
 
 const UserProfileData = () => {
   const { user } = useContext(AuthContext);
-  const tasks = user?.tasks;
+  //const tasks = user?.tasks;
 
   const [openModal, setOpenModal] = useState(false);
+
+  const dispatch = useDispatch();
+
+  if (user) {
+    const fetchTasks = () => {
+      const { data } = useQuery(TaskOperations.Query.GET_TASKS, { variables: { userId: user?._id } });
+      dispatch(getTasks(data));
+    }
+    fetchTasks();
+  };
+
+  const tasks = user? useSelector(getAllTasks) : [];
 
   return (
     <div className={styles.userProfileDataWrapper}>
@@ -22,7 +38,7 @@ const UserProfileData = () => {
         <div className={styles.tasksWrapper}>
           <ol>
             {
-              tasks?.map((task: any, index: any) => {
+              tasks ? (tasks.getTasks.map((task: any, index: any) => {
                 return (
                   <div key={index} className={styles.taskWrapper}>
                     <div className={styles.taskTitleWrapper}>
@@ -31,7 +47,7 @@ const UserProfileData = () => {
                     <Timer />
                   </div>
                 )
-              })
+              })) : (<h2>No tasks</h2>)
             }
           </ol>
         </div>
