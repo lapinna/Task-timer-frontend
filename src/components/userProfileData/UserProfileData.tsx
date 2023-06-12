@@ -1,31 +1,24 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styles from "./UserProfileData.module.scss";
 import { AuthContext } from "@/context/AuthContext";
 import SearchBar from "../searchBar/SearchBar";
 import Timer from "../timer/Timer";
 import Modal from "../modal/Modal";
-import { useDispatch, useSelector } from "react-redux";
-import { useQuery } from "@apollo/client";
-import TaskOperations from "../../graphql/operations/task";
-import { getTasks, getAllTasks } from "@/redux/features/taskSlice";
+import { getTasks } from "@/redux/features/taskSlice";
 
 const UserProfileData = () => {
   const { user } = useContext(AuthContext);
-  //const tasks = user?.tasks;
+  const dispatch = useDispatch();
+  const tasks = user?.tasks;
+
+  useEffect(() => {
+    dispatch(getTasks(tasks));
+  }, [dispatch])
+
+  const data = useSelector((state: any) => state.tasks.tasks)
 
   const [openModal, setOpenModal] = useState(false);
-
-  const dispatch = useDispatch();
-
-  if (user) {
-    const fetchTasks = () => {
-      const { data } = useQuery(TaskOperations.Query.GET_TASKS, { variables: { userId: user?._id } });
-      dispatch(getTasks(data));
-    }
-    fetchTasks();
-  };
-
-  const tasks = user? useSelector(getAllTasks) : [];
 
   return (
     <div className={styles.userProfileDataWrapper}>
@@ -38,7 +31,7 @@ const UserProfileData = () => {
         <div className={styles.tasksWrapper}>
           <ol>
             {
-              tasks ? (tasks.getTasks.map((task: any, index: any) => {
+              data ? (data.map((task: any, index: any) => {
                 return (
                   <div key={index} className={styles.taskWrapper}>
                     <div className={styles.taskTitleWrapper}>

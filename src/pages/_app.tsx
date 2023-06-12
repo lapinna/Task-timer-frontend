@@ -8,12 +8,12 @@ import store from './../redux/store'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <Provider store={store}>
     <AuthProvider>
-      <ApolloProvider client={client}>
-        <Component {...pageProps} />
-      </ApolloProvider>
+      <Provider store={store}>
+        <ApolloProvider client={client}>
+          <Component {...pageProps} />
+        </ApolloProvider>
+      </Provider>
     </AuthProvider>
-    </Provider>
   )
 }
